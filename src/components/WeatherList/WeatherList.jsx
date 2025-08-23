@@ -1,19 +1,17 @@
 import React from 'react';
-import WeatherItem from "./weather-item/WeatherItem";
+import WeatherItem from "../weather-item/WeatherItem";
 
-const WeatherList = (city) => {
-
-    if (!city.length) {
-        return (
-            <h1 style={{textAlign: 'center'}}>
-                City haven't been found
-            </h1>
-        )
-    }
-
+const WeatherList = ({cities}) => {
     return (
         <div>
-            <WeatherItem  />
+            {cities.map ((cityInfo, index) => {
+                    return (
+                    <WeatherItem
+                        key={index}
+                        {...cityInfo}
+                    />)
+                }
+            )}
         </div>
     );
 };

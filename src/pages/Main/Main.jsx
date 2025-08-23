@@ -1,56 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import MyInput from "../components/UI/input/MyInput";
-import {useFetching} from "../hooks/useFetching";
-import WeatherService from "../API/WeatherService";
-import MyButton from "../components/UI/button/MyButton";
-import {parseWeatherData, resetWeatherData, setWeatherData} from "../utils/weather";
-import WeatherContent from "../components/weather-content/WeatherContent";
+import MyInput from "../../components/UI/input/MyInput";
+import MyButton from "../../components/UI/button/MyButton";
+import WeatherContent from "../../components/weather-content/WeatherContent";
+import classes from "./Main.module.css";
+import {useWeatherData} from "../../hooks/useWeatherData";
 
 const Main = () => {
 
     const [input, setInput] = useState("");
-    const [city, setCity] = React.useState("moscow");
     const [searchCity, setSearchCity] = React.useState("moscow");
-    const [weather, setWeather] = React.useState("");
-    const [temperature, setTemperature] = React.useState("");
-    const [iconCode, setIconCode] = React.useState("");
-    const [wind, setWind] = React.useState("");
-    const [humidity, setHumidity] = React.useState("");
 
-    const setters = {
-        setCity,
-        setWeather,
-        setIconCode,
-        setTemperature,
-        setWind,
-        setHumidity
-    }
-
-    const [fetchCity, isCityLoading, cityError] = useFetching(async (cityName) => {
-        const response = await WeatherService.getObjectData(cityName)
-        const [lon, lat] = response.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(" ")
-        const weatherResponse = await WeatherService.getWeatherData(lat, lon)
-
-        const weatherData = parseWeatherData(weatherResponse);
-        setWeatherData(
-            setters,
-            weatherData
-        );
-    })
+    const {
+        weatherData,
+        isLoading,
+        error,
+        loadWeather,
+        setCity
+    } = useWeatherData("moscow");
 
     useEffect(() => {
-        fetchCity("moscow");
+        loadWeather("moscow");
     }, []);
 
     useEffect(() => {
-        const loadWeatherData = async () => {
-            try {
-                await fetchCity(searchCity);
-            } catch (e) {
-                resetWeatherData(setters);
-            }
-        }
-        loadWeatherData();
+        loadWeather(searchCity);
     }, [searchCity]);
 
     const handleSearch = () => {
@@ -67,15 +40,16 @@ const Main = () => {
                     placeholder="location"
                     onChange={e=>setInput(e.target.value)}
                 />
-                <MyButton onClick={handleSearch}>
-                    Search
-                </MyButton>
-            </div>
+                <div className={classes.button}>
+                    <MyButton onClick={handleSearch}>
+                        Search
+                    </MyButton></div>
+                </div>
 
             <WeatherContent
-                isLoading={isCityLoading}
-                error={cityError}
-                weatherData={{ city, weather, temperature, wind, humidity, iconCode }}
+                isLoading={isLoading}
+                error={error}
+                weatherData={weatherData}
             />
 
         </div>

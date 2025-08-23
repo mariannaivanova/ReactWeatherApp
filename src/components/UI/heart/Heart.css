@@ -1,8 +1,33 @@
 .heart {
     cursor: pointer;
     transition: all 0.3s ease;
+
+}
+
+.heart__path {
+    transition: all 0.3s ease;
+}
+
+.heart .heart__path {
+    fill: transparent;
+    stroke: #000;
+    stroke-width: 1.5;
+}
+
+.heart:hover .heart__path {
+    fill: #ff6b81;
+    stroke: #ff4757;
+}
+
+.heart--active .heart__path {
+    fill: #ff4757;
+    stroke: #ff4757;
 }
 
 .heart:hover {
     transform: scale(1.1);
+}
+
+.heart:active {
+    transform: scale(0.95);
 }
