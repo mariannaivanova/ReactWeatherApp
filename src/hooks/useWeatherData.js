@@ -1,6 +1,6 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState} from "react";
 import {useFetching} from "./useFetching";
-import WeatherService from "../API/WeatherService";
+import WeatherService from "../api/WeatherService";
 import {parseWeatherData, resetWeatherData, setWeatherData} from "../utils/weather";
 
 export const useWeatherData = (initialCity = "moscow") => {
@@ -10,6 +10,8 @@ export const useWeatherData = (initialCity = "moscow") => {
     const [iconCode, setIconCode] = React.useState("");
     const [wind, setWind] = React.useState("");
     const [humidity, setHumidity] = React.useState("");
+    const [error, setError] = React.useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const setters = {
         setCity,
@@ -32,26 +34,25 @@ export const useWeatherData = (initialCity = "moscow") => {
         );
     })
 
-    const loadWeather = useCallback(async (cityName) => {
+    const loadWeather = async (cityName) => {
+        setIsLoading(true);
+        resetWeatherData(setters);
         try {
             await fetchCity(cityName);
         } catch (e) {
-            resetWeatherData();
-            throw e;
+            resetWeatherData(setters);
+            setError(e.message);
         }
-    }, [fetchCity, resetWeatherData]);
+        finally {
+            setIsLoading(false);
+        }
+    };
 
     return {
-        city,
-        weather,
-        temperature,
-        iconCode,
-        wind,
-        humidity,
         weatherData: { city, weather, temperature, iconCode, wind, humidity },
 
-        isCityLoading,
-        cityError,
+        isLoading: isLoading || isCityLoading,
+        cityError: cityError || error,
 
         loadWeather,
         setCity
