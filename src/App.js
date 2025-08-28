@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter} from "react-router-dom";
-import "./styles/App.css";
+import "./styles/app.css";
 import AppRouter from "./router/AppRouter";
 import Navbar from "./components/UI/navbar/Navbar";
 import {AuthContext} from "./context/AuthContext";

@@ -36,8 +36,7 @@ export const useWeatherData = (initialCity = "moscow") => {
         } catch (e) {
             resetWeatherData(setters);
             setWeatherError(e.message);
-        }
-        finally {
+        } finally {
             setIsWeatherLoading(false);
         }
     };
