@@ -1,7 +1,7 @@
 import React from 'react';
-import classes from './MyError.module.css';
+import classes from './Error.module.css';
 
-const MyError = () => {
+const Error = () => {
     return (
         <div className={classes.myError}>
             city haven't been found
@@ -9,4 +9,4 @@ const MyError = () => {
     );
 };
 
-export default MyError;
+export default Error;

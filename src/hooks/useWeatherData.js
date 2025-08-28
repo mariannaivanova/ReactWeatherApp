@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from "react";
 import {useFetching} from "./useFetching";
-import WeatherService from "../api/WeatherService";
+import WeatherService from "../services/WeatherService";
 import {parseWeatherData, resetWeatherData, setWeatherData} from "../utils/weather";
 
 export const useWeatherData = (initialCity = "moscow") => {
@@ -24,7 +24,13 @@ export const useWeatherData = (initialCity = "moscow") => {
 
     const [fetchCity, isCityLoading, cityError] = useFetching(async (cityName) => {
         const response = await WeatherService.getObjectData(cityName)
-        const [lon, lat] = response.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(" ")
+        const posString = response?.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
+
+        if (!posString) {
+            throw new Error(`Город "${cityName}" не найден или координаты недоступны`);
+        }
+
+        const [lon, lat] = posString.split(" ");
         const weatherResponse = await WeatherService.getWeatherData(lat, lon)
 
         const weatherData = parseWeatherData(weatherResponse);

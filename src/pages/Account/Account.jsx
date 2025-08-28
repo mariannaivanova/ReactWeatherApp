@@ -1,5 +1,5 @@
 import React from 'react';
-import WeatherList from "../../components/WeatherList/WeatherList";
+import WeatherList from "../../components/weather-list/WeatherList";
 import {useFavorites} from "../../hooks/useFavorites";
 
 const Account = () => {

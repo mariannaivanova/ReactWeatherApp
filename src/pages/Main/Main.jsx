@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import MyInput from "../../components/UI/input/MyInput";
-import MyButton from "../../components/UI/button/MyButton";
+import Input from "../../components/UI/input/Input";
+import Button from "../../components/UI/button/Button";
 import WeatherContent from "../../components/weather-content/WeatherContent";
 import classes from "./Main.module.css";
 import {useWeatherData} from "../../hooks/useWeatherData";
@@ -34,16 +34,16 @@ const Main = () => {
     return (
         <div>
             <div className="searchLine">
-                <MyInput
+                <Input
                     value={input}
                     type="text"
                     placeholder="location"
                     onChange={e=>setInput(e.target.value)}
                 />
                 <div className={classes.button}>
-                    <MyButton onClick={handleSearch}>
+                    <Button onClick={handleSearch}>
                         Search
-                    </MyButton></div>
+                    </Button></div>
                 </div>
 
             <WeatherContent

@@ -1,6 +1,6 @@
 import React from 'react';
-import MyLoader from "../UI/loader/MyLoader";
-import MyError from "../UI/error/MyError";
+import Loader from "../UI/loader/Loader";
+import Error from "../UI/error/Error";
 import WeatherItem from "../weather-item/WeatherItem";
 
 const WeatherContent = ({
@@ -11,13 +11,13 @@ const WeatherContent = ({
     if (isLoading) {
         return (
             <div className="loader">
-                <MyLoader />
+                <Loader />
             </div>
         );
     }
 
     if (error || !weatherData.city) {
-        return <MyError message={error?.message} />;
+        return <Error message={error?.message} />;
     }
 
     return <WeatherItem {...weatherData} />;
