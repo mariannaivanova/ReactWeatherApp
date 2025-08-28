@@ -1,6 +1,6 @@
-import React, {useCallback, useState} from "react";
+import React from "react";
 import {useFetching} from "./useFetching";
-import WeatherService from "../services/WeatherService";
+import { WeatherService } from "../services/weatherService";
 import {parseWeatherData, resetWeatherData, setWeatherData} from "../utils/weather";
 
 export const useWeatherData = (initialCity = "moscow") => {
@@ -10,8 +10,8 @@ export const useWeatherData = (initialCity = "moscow") => {
     const [iconCode, setIconCode] = React.useState("");
     const [wind, setWind] = React.useState("");
     const [humidity, setHumidity] = React.useState("");
-    const [error, setError] = React.useState("");
-    const [isLoading, setIsLoading] = useState(false);
+    const [weatherError, setWeatherError] = React.useState("");
+    const [isWeatherLoading, setIsWeatherLoading] = React.useState(false);
 
     const setters = {
         setCity,
@@ -20,49 +20,33 @@ export const useWeatherData = (initialCity = "moscow") => {
         setTemperature,
         setWind,
         setHumidity
-    }
+    };
 
-    const [fetchCity, isCityLoading, cityError] = useFetching(async (cityName) => {
-        const response = await WeatherService.getObjectData(cityName)
-        const posString = response?.data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
-
-        if (!posString) {
-            throw new Error(`Город "${cityName}" не найден или координаты недоступны`);
-        }
-
-        const [lon, lat] = posString.split(" ");
-        const weatherResponse = await WeatherService.getWeatherData(lat, lon)
-
-        const weatherData = parseWeatherData(weatherResponse);
-        setWeatherData(
-            setters,
-            weatherData
-        );
-    })
+    const [fetchWeather, isLoading, error] = useFetching(async (cityName) => {
+        const weatherResponse = await WeatherService.getWeatherByCity(cityName);
+        const weatherData = parseWeatherData({ data: weatherResponse });
+        setWeatherData(setters, weatherData);
+    });
 
     const loadWeather = async (cityName) => {
-        setIsLoading(true);
+        setIsWeatherLoading(true);
         resetWeatherData(setters);
         try {
-            await fetchCity(cityName);
+            await fetchWeather(cityName);
         } catch (e) {
             resetWeatherData(setters);
-            setError(e.message);
+            setWeatherError(e.message);
         }
         finally {
-            setIsLoading(false);
+            setIsWeatherLoading(false);
         }
     };
 
     return {
         weatherData: { city, weather, temperature, iconCode, wind, humidity },
-
-        isLoading: isLoading || isCityLoading,
-        cityError: cityError || error,
-
+        isLoading: isLoading || isWeatherLoading,
+        error: error || weatherError,
         loadWeather,
         setCity
     };
-
-
-}
+};

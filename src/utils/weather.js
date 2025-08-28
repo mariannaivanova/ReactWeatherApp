@@ -1,20 +1,14 @@
 export const parseWeatherData = (weatherResponse) => {
-    weatherResponse = weatherResponse.data;
-    const city = weatherResponse.name;
-    const weather = weatherResponse.weather[0].main;
-    const iconCode = weatherResponse.weather[0].icon;
-    const temperature = Math.round(weatherResponse.main.temp - 273);
-    const wind = weatherResponse.wind.speed;
-    const humidity = weatherResponse.main.humidity;
+    const data = weatherResponse.data || weatherResponse;
 
-    return [
-        city,
-        weather,
-        iconCode,
-        temperature,
-        wind,
-        humidity,
-    ];
+    const city = data.name;
+    const weather = data.weather[0].main;
+    const iconCode = data.weather[0].icon;
+    const temperature = Math.round(data.main.temp - 273);
+    const wind = data.wind.speed;
+    const humidity = data.main.humidity;
+
+    return [city, weather, iconCode, temperature, wind, humidity];
 };
 
 export const resetWeatherData = setters => {
@@ -26,5 +20,5 @@ export const resetWeatherData = setters => {
 export const setWeatherData = (setters, data) => {
     Object.values(setters).forEach((setter, index) => {
         setter(data[index]);
-    })
+    });
 };
