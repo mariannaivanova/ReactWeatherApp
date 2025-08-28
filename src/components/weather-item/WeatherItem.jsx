@@ -7,25 +7,18 @@ import {useFavorites} from "../../hooks/useFavorites";
 const WeatherItem = (props) => {
 
     const { isAuth } = useContext(AuthContext);
-    const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+    const { favorites, addFavorite, removeFavorite, isFavorite } = useFavorites();
     const [active, setActive] = useState(isFavorite(props.city));
 
     useEffect(() => {
         setActive(isFavorite(props.city));
-    }, [props.city, isFavorite]);
+    }, [favorites, props.city]);
 
     const handleHeartClick = () => {
         if (active) {
-            removeFavorite(props.city);
+            removeFavorite({...props});
         } else {
-            addFavorite({
-                city: props.city,
-                weather: props.weather,
-                temperature: props.temperature,
-                humidity: props.humidity,
-                wind: props.wind,
-                iconCode: props.iconCode
-            });
+            addFavorite({...props});
         }
         setActive(!active);
     };

@@ -13,14 +13,19 @@ const Navbar = () => {
             ? privateRoutes
             : publicRoutes;
 
+    const logout = () => {
+        setIsAuth(false);
+        localStorage.removeItem("auth");
+    }
+
 
     return (
         <div className={classes.navbar}>
             <div className={classes.navbar__links}>
-                { isAuth && <Button children="logout" onClick={() => setIsAuth(false)}/>}
+                { isAuth && <Button children="logout" onClick={logout}/>}
                 { routes.map(item => {
                 return (
-                    <Link to={item.path}> {item.name} </Link>
+                    <Link to={item.path} key={item.name}> {item.name} </Link>
                 )
             })}
                 </div>

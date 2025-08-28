@@ -4,7 +4,7 @@ import {useFavorites} from "../../hooks/useFavorites";
 
 const Account = () => {
 
-    const { favorites, addFavorite, removeFavorite, isFavorite } = useFavorites();
+    const { favorites } = useFavorites();
 
     return (
         <div>

@@ -10,8 +10,7 @@ const Login = () => {
     const login = event => {
         event.preventDefault();
         setIsAuth(true);
-        localStorage.setItem("isAuth", isAuth);
-
+        localStorage.setItem("auth", "true");
     }
 
     return (

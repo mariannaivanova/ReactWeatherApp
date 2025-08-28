@@ -2,6 +2,7 @@ import React from 'react';
 import WeatherItem from "../weather-item/WeatherItem";
 
 const WeatherList = ({cities}) => {
+
     return (
         <div>
             {cities.map ((cityInfo, index) => {

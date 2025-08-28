@@ -1,4 +1,4 @@
 import React from 'react'
 
-export const FavoritesContext = React.createContext(null)
+export const FavoritesContext = React.createContext([])
 
